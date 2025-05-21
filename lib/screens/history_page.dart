@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:kas_umkm/providers/category_provider.dart';
 import 'package:provider/provider.dart';
@@ -23,20 +24,24 @@ class _HistoryPageState extends State<HistoryPage> {
     final provider = Provider.of<TransactionProvider>(context);
     final transactions = provider.transactions;
     final categoryProvider = Provider.of<CategoryProvider>(context);
-    final categories = categoryProvider.categories;    
+    final categories = categoryProvider.categories;
 
-     // gabungkan dengan 'Semua'
+    // gabungkan dengan 'Semua'
     final categoryOptions = ['Semua', ...categories.map((e) => e.name)];
-    
 
     // Filtering
-    List<Transaction> filtered = transactions.where((tx) {
-      final matchCategory = selectedCategory == 'Semua' ||
-          (tx.category?.toLowerCase().trim() == selectedCategory.toLowerCase().trim());
-      final matchDate = selectedDate == null ||
-          DateFormat('yyyy-MM-dd').format(tx.date) == DateFormat('yyyy-MM-dd').format(selectedDate!);
-      return matchCategory && matchDate;
-    }).toList();
+    List<Transaction> filtered =
+        transactions.where((tx) {
+          final matchCategory =
+              selectedCategory == 'Semua' ||
+              (tx.category?.toLowerCase().trim() ==
+                  selectedCategory.toLowerCase().trim());
+          final matchDate =
+              selectedDate == null ||
+              DateFormat('yyyy-MM-dd').format(tx.date) ==
+                  DateFormat('yyyy-MM-dd').format(selectedDate!);
+          return matchCategory && matchDate;
+        }).toList();
 
     filtered.sort((a, b) => b.date.compareTo(a.date));
 
@@ -54,7 +59,12 @@ class _HistoryPageState extends State<HistoryPage> {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Riwayat Transaksi'), elevation: 0),
+      appBar: AppBar(
+        title: Text('Riwayat Transaksi', style: GoogleFonts.poppins(fontWeight: FontWeight.w600),), 
+        elevation: 0,
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        ),
       body: Column(
         children: [
           // Filter UI
@@ -67,12 +77,13 @@ class _HistoryPageState extends State<HistoryPage> {
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         value: selectedCategory,
-                        items: categoryOptions.map((category) {
-                          return DropdownMenuItem(
-                            value: category,
-                            child: Text(category),
-                          );
-                        }).toList(),
+                        items:
+                            categoryOptions.map((category) {
+                              return DropdownMenuItem(
+                                value: category,
+                                child: Text(category),
+                              );
+                            }).toList(),
                         onChanged: (value) {
                           setState(() {
                             selectedCategory = value!;
@@ -208,7 +219,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                       ),
                                     ),
                                     subtitle: Text('${tx.category} • $amount'),
-                                    trailing: PopupMenuButton<String>( 
+                                    trailing: PopupMenuButton<String>(
                                       onSelected: (value) {
                                         if (value == 'edit') {
                                           Navigator.push(
@@ -221,27 +232,31 @@ class _HistoryPageState extends State<HistoryPage> {
                                             ),
                                           );
                                         } else if (value == 'delete') {
-                                          Provider.of<TransactionProvider>(context, listen: false)
-                                              .deleteTransaction(tx.id);
+                                          Provider.of<TransactionProvider>(
+                                            context,
+                                            listen: false,
+                                          ).deleteTransaction(tx.id);
                                         }
                                       },
-                                      itemBuilder: (context) => const [
-                                        PopupMenuItem(
-                                          value: 'edit',
-                                          child: Text('Edit'),
-                                        ),
-                                        PopupMenuItem(
-                                          value: 'delete',
-                                          child: Text('Hapus'),
-                                        ),
-                                      ],
+                                      itemBuilder:
+                                          (context) => const [
+                                            PopupMenuItem(
+                                              value: 'edit',
+                                              child: Text('Edit'),
+                                            ),
+                                            PopupMenuItem(
+                                              value: 'delete',
+                                              child: Text('Hapus'),
+                                            ),
+                                          ],
                                     ),
                                     onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) =>
-                                              TransactionDetailPage(tx: tx),
+                                          builder:
+                                              (_) =>
+                                                  TransactionDetailPage(tx: tx),
                                         ),
                                       );
                                     },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../providers/transaction_provider.dart';
@@ -23,7 +24,9 @@ class DashboardPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pengelolaan Keuangan UMKM'),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+        title:  Text('Dashboard Kas UMKM', style: GoogleFonts.poppins(fontWeight: FontWeight.w600),)
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
